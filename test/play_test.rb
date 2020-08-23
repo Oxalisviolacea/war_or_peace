@@ -22,7 +22,6 @@ class PlayTest <Minitest::Test
    player1 = Player.new("Megan", deck1)
    player2 = Player.new("Aurora", deck2)
    turn = Turn.new(player1, player2)
-  # play = Play.new(turn)
 
    assert_instance_of Play, play
   end
@@ -43,6 +42,4 @@ class PlayTest <Minitest::Test
     turn = Turn.new(player1, player2)
 
     assert_equal player1, turn.player1
-    assert_equal player2, turn.player2
-    assert_equal [], turn.spoils_of_war
   end

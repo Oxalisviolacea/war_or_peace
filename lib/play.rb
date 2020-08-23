@@ -73,16 +73,17 @@ class Play
     create_players
     puts intro_text
     prompt_for_start
-
+    game_loop
+    state_winner
   end
 
   def shuffle
-    @cards_52.shuffle
+    @cards_52.shuffle!
   end
 
   def deal_cards
-    @deck1 = @cards_52[0..25]
-    @deck2 = @cards_52[26..-1]
+    @deck1 = Deck.new(@cards_52[0..25])
+    @deck2 = Deck.new(@cards_52[26..-1])
   end
 
   def intro_text
@@ -101,19 +102,39 @@ class Play
   def prompt_for_start
     user_question = gets.chomp.upcase
     if user_question == "GO"
-      p "Starting play."
+      p "This means war!"
     else
-      p "Something went wrong."
+      p "Alright, maybe another time."
     end
   end
 
-def game_loop
- Turn.new(@player1)
- Turn.new(@player2)
-end 
+  def game_loop
+    for turn_number in 1..1000000 do
+      break if @player1.has_lost || @player2.has_lost
+      turn = Turn.new(@player1, @player2)
+      turn_type = turn.type
+      winner = turn.winner
+      turn.pile_cards
+      number_cards_in_spoils = turn.spoils_of_war.count
+      turn.award_spoils(winner)
 
+      if turn_type == :basic
+        p "Turn #{turn_number}: #{winner.name} won #{number_cards_in_spoils} cards"
+      elsif turn_type == :war
+        p "Turn #{turn_number}: WAR - #{winner.name} won #{number_cards_in_spoils} cards"
+      elsif turn_type == :mutually_assured_destruction
+        p "Turn #{turn_number}: *mutually assured destruction* 6 cards removed from play"
+      end
+    end
+  end
+# test winner before piling cards because cards will leave the players decks before rank is assessed
   def state_winner
-    return winner if @deck.cards.empty?
-    p ""
+    if @player1.has_lost
+      p "*~*~*~* #{@player2.name} has won the game! *~*~*~*"
+    elsif @player2.has_lost
+      p "*~*~*~* #{@player1.name} has won the game! *~*~*~*"
+    else
+      p "---- DRAW ----"
+    end
   end
 end
