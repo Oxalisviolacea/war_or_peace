@@ -95,10 +95,9 @@ class TurnTest <Minitest::Test
     player1 = Player.new("Megan", deck1)
     player2 = Player.new("Aurora", deck2)
     turn = Turn.new(player1, player2)
+    turn.pile_cards
 
-    assert_equal turn.spoils_of_war, turn.pile_cards
-    assert_equal 3 ,player1.deck.cards.count
-    assert_equal 3 ,player2.deck.cards.count
+    assert_equal [card1, card3], turn.spoils_of_war
   end
 
   def test_basic_award_spoils
@@ -116,11 +115,10 @@ class TurnTest <Minitest::Test
     player2 = Player.new("Aurora", deck2)
     turn = Turn.new(player1, player2)
     winner = turn.winner
-    turn.pile_cards
+    turn.award_spoils(winner)
 
-    assert_equal turn.spoils_of_war, turn.award_spoils(winner)
-    assert_equal 5 ,player1.deck.cards.count
-    assert_equal 3 ,player2.deck.cards.count
+    assert_equal deck1, player1.deck
+    assert_equal deck2, player2.deck
   end
 
  #-------------------------------------------
@@ -175,11 +173,9 @@ class TurnTest <Minitest::Test
     player1 = Player.new("Megan", deck1)
     player2 = Player.new("Aurora", deck2)
     turn = Turn.new(player1, player2)
+    turn.pile_cards
 
-    # assert_equal turn.spoils_of_war, turn.pile_cards
-    # assert_equal 6, @spoils_of_war.count
-    assert_equal 1 ,player1.deck.cards.count
-    assert_equal 1 ,player2.deck.cards.count
+    assert_equal [card1, card2, card5, card4, card3, card6], turn.spoils_of_war
   end
 
   def test_war_award_spoils
@@ -198,10 +194,10 @@ class TurnTest <Minitest::Test
     turn = Turn.new(player1, player2)
     winner = turn.winner
     turn.pile_cards
+    turn.award_spoils(winner)
 
-    assert_equal turn.spoils_of_war, turn.award_spoils(winner)
-    assert_equal 1 ,player1.deck.cards.count
-    assert_equal 7 ,player2.deck.cards.count
+    assert_equal [card8], player1.deck.cards
+    assert_same [card7, card3, card6, card7, card1, card2, card5], player2.deck.cards
   end
 
   #----------------------------------------
@@ -258,8 +254,8 @@ class TurnTest <Minitest::Test
     turn = Turn.new(player1, player2)
 
     assert_equal [], turn.spoils_of_war
-    assert_equal 1 ,player1.deck.cards.count
-    assert_equal 1 ,player2.deck.cards.count
+    assert_equal [card8] ,player1.deck.cards
+    assert_equal [card7] ,player2.deck.cards
 
     turn = Turn.new(player1, player2)
   end
