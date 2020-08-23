@@ -4,7 +4,6 @@ class Deck
 
   def initialize(cards)
     @cards = cards
-    @high_ranking_cards = []
   end
 
   def rank_of_card_at(position)
@@ -12,32 +11,22 @@ class Deck
   end
 
   def high_ranking_cards
-    return @high_ranking_cards unless @high_ranking_cards.empty?
-    @cards.each do |card|
-      if card.rank > 11
-        @high_ranking_cards << card
-      end
-    end
-    @high_ranking_cards
-  end
-
-  def high_ranking_cards
-    return @high_ranking_cards unless @high_ranking_cards.empty?
+    return @high_rank_cards unless @high_rank_cards.empty?
     @cards.select do |card|
       card.rank > 11
     end
   end
 
   def percent_high_ranking
-    pct_high_ranking = (count.to_f/@cards.count.to_f)*100
+    pct_high_ranking = ((high_ranking_cards.count.to_f/@cards.count.to_f)*100).round(2)
     pct_high_ranking
   end
 
   def remove_card
-    @cards.drop(1)
+    @cards.shift
   end
 
-  def add_card
-    @cards << cards
+  def add_card(card)
+    @cards.push(card)
   end
 end
