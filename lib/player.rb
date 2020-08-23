@@ -1,4 +1,3 @@
-# require "pry"; binding.pry
 class Player
   attr_reader :name, :deck
 
