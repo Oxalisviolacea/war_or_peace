@@ -5,52 +5,64 @@ class Turn
    @player1 = player1
    @player2 = player2
    @spoils_of_war  =  []
-   # @turn_type = turn_type
-   # @winner = winner
+   @discard_deck = []
   end
 
   def type
-    if player1.deck.rank_of_card_at(0) != player2.deck.rank_of_card_at(0)
-      @turn_type = "basic"
-    elsif player1.deck.rank_of_card_at(0) == player2.deck.rank_of_card_at(0)
-      @turn_type = "war"
-    elsif
-      player1.deck.rank_of_card_at(0) == player2.deck.rank_of_card_at(0) &&
+    if player1.deck.rank_of_card_at(0) == player2.deck.rank_of_card_at(0) &&
       player1.deck.rank_of_card_at(2) == player2.deck.rank_of_card_at(2)
-      @turn_type = "mutually_assured_destruction"
+      :mutually_assured_destruction
+    elsif player1.deck.rank_of_card_at(0) == player2.deck.rank_of_card_at(0)
+      :war
+    elsif player1.deck.rank_of_card_at(0) != player2.deck.rank_of_card_at(0)
+      :basic
     end
   end
-  #
-  # def winner
-  #   if turn_type = "basic"
-  #     if player1.deck.value.rank_of_card_at(0) > player2.deck.value.rank_of_card_at(0)
-  #        winner = player1
-  #     else
-  #        winner = player2
-  #     end
-  #   elsif turn_type = "war"
-  #      if player1.deck.value.rank_of_card_at(2) > player2.deck.value.rank_of_card_at(2)
-  #         winner = player1
-  #      else
-  #         winner = player2
-  #       end
-  #   else turn_type = "mutually_assured_destruction"
-  #         winner = "No winner"
-  #   end
-  # end
-  #
-  # def pile_cards
-  #   if turn_type == "basic"
-  #     spoils_of_war << player1.deck.rank_of_card_at(0)
-  #     spoils_of_war << player2.deck.rank_of_card_at(0)
-  #   elsif turn_type == "war"
-  #     player1.deck.rank_of_card_at(0..3) >> spoils_of_war
-  #     player1.deck.rank_of_card_at(0..3).remove_card
-  #     player2.deck.rank_of_card_at(0..3) >> spoils_of_war
-  #     player2.deck.rank_of_card_at(0..3).remove_card
-  #   else turn_type == "mutually_assured_destruction"
-  #     player1.deck.rank_of_card_at(0..3).remove_card
-  #     player2.deck.rank_of_card_at(0..3).remove_card
-  #   end
-  # end
+
+  # long way of referencing this: player2.deck.cards.rank.rank_of_card_at(0)
+  ## the cards class is where rank_of_card_at is stored, but rank is written into the rank_of_card_at method
+
+  def winner
+    if type == :basic
+      if player1.deck.rank_of_card_at(0) > player2.deck.rank_of_card_at(0)
+         player1
+      else
+         player2
+      end
+    elsif type == :war
+       if player1.deck.rank_of_card_at(2) > player2.deck.rank_of_card_at(2)
+          player1
+       else
+          player2
+        end
+    elsif type == :mutually_assured_destruction
+         "No winner"
+    end
+  end
+
+  def pile_cards
+    if type == :basic
+      @spoils_of_war << player1.deck.remove_card
+      @spoils_of_war << player2.deck.remove_card
+    elsif type == :war
+      3.times {@spoils_of_war << player1.deck.remove_card}
+      3.times {@spoils_of_war << player2.deck.remove_card}
+    elsif type == :mutually_assured_destruction
+      3.times {@discard_deck << player1.deck.remove_card}
+      3.times {@discard_deck << player2.deck.remove_card}
+    end
+  end
+
+  def award_spoils(winner)
+    @spoils_of_war.each do |card|
+      winner.deck.cards << card
+    end
+  end
+
+  def empty_spoils
+    @spoils_of_war = []
+  end
+  # using winner = turn.winner from the local varible in test_basic_award_spoils
 end
+#  @spoils_of_war = [] - might need later because it's not emptying after turn
+# hard coded test_basic_award_spoils
