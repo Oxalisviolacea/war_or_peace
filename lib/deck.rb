@@ -1,9 +1,9 @@
-# require "pry"; binding.pry
 class Deck
   attr_reader :cards
 
   def initialize(cards)
     @cards = cards
+    @high_rank_cards = []
   end
 
   def rank_of_card_at(position)
@@ -12,7 +12,7 @@ class Deck
 
   def high_ranking_cards
     return @high_rank_cards unless @high_rank_cards.empty?
-    @cards.select do |card|
+    @high_rank_cards = @cards.select do |card|
       card.rank > 11
     end
   end
