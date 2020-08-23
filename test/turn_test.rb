@@ -195,9 +195,9 @@ class TurnTest <Minitest::Test
     winner = turn.winner
     turn.pile_cards
     turn.award_spoils(winner)
-
     assert_equal [card8], player1.deck.cards
-    assert_same [card7, card3, card6, card7, card1, card2, card5], player2.deck.cards
+    assert_equal [card7, card1, card2, card5, card4, card3, card6], player2.deck.cards
+
   end
 
   #----------------------------------------
@@ -252,6 +252,7 @@ class TurnTest <Minitest::Test
     player1 = Player.new("Megan", deck1)
     player2 = Player.new("Aurora", deck2)
     turn = Turn.new(player1, player2)
+    turn.pile_cards
 
     assert_equal [], turn.spoils_of_war
     assert_equal [card8] ,player1.deck.cards
