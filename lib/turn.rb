@@ -1,15 +1,17 @@
 class Turn
-  attr_reader :player1, :player2, :spoils_of_war
+  attr_reader :player1,
+              :player2,
+              :spoils_of_war
 
   def initialize(player1, player2)
-   @player1 = player1
-   @player2 = player2
-   @spoils_of_war  =  []
+   @player1       = player1
+   @player2       = player2
+   @spoils_of_war = []
   end
 
   def type
     if @player1.deck.rank_of_card_at(0) == @player2.deck.rank_of_card_at(0) &&
-      @player1.deck.rank_of_card_at(2) == @player2.deck.rank_of_card_at(2)
+     @player1.deck.rank_of_card_at(2) == @player2.deck.rank_of_card_at(2)
       :mutually_assured_destruction
     elsif @player1.deck.rank_of_card_at(0) == @player2.deck.rank_of_card_at(0)
       :war
@@ -21,18 +23,18 @@ class Turn
   def winner
     if type == :basic
       if @player1.deck.rank_of_card_at(0) > @player2.deck.rank_of_card_at(0)
-         @player1
+        @player1
       else
-         @player2
+        @player2
       end
     elsif type == :war
        if @player1.deck.rank_of_card_at(2) > @player2.deck.rank_of_card_at(2)
-          @player1
+        @player1
        else
-          @player2
+        @player2
         end
     elsif type == :mutually_assured_destruction
-         "No winner"
+        "No winner"
     end
   end
 
@@ -57,9 +59,4 @@ class Turn
       winner.deck.add_card(card)
     end
   end
-  #using winner = turn.winner from the local varible in test_basic_award_spoils
 end
-
-# Questions
-# test_war_award_spoils - change order of expected
-# test_mutually_assured_destruction_winner_pile_cards - change order of expected

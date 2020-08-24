@@ -91,12 +91,11 @@ class Play
     The players today are Megan and Aurora.
     Type 'GO' to start the game!
     ------------------------------------------------------------------"
-#look up heredoc
   end
 
   def create_players
-      @player1 = Player.new("Megan", @deck1)
-      @player2 = Player.new("Aurora", @deck2)
+    @player1 = Player.new("Megan", @deck1)
+    @player2 = Player.new("Aurora", @deck2)
   end
 
   def prompt_for_start
@@ -127,7 +126,7 @@ class Play
       end
     end
   end
-# test winner before piling cards because cards will leave the players decks before rank is assessed
+  
   def state_winner
     if @player1.has_lost
       p "*~*~*~* #{@player2.name} has won the game! *~*~*~*"
